@@ -4,6 +4,7 @@ const {
   createNewAccount,
   accountLogin,
   updatePassword,
+  getAllAccounts,
   index,
 } = require("../services/AuthService");
 
@@ -13,7 +14,7 @@ const handleRegister = async (req, res) => {
   if (emailExist) {
     res.status(400).json({
       success: "false",
-      message: "Email already exist!",
+      message: "Email đã tồn tại!",
     });
   } else {
     const passwordDB = await hashPassword(data?.password);
@@ -25,7 +26,7 @@ const handleRegister = async (req, res) => {
     const accountData = await createNewAccount(newData);
     res.status(200).json({
       success: "true",
-      message: "Account created successfully",
+      message: "Đăng ký tài khoản thành công!",
       data: accountData,
     });
   }
@@ -38,7 +39,7 @@ const handleLogin = async (req, res) => {
   if (!accountExist) {
     res.status(400).json({
       success: false,
-      message: "Account not found!",
+      message: "Email chưa đăng ký!",
     });
     return;
   }
@@ -48,16 +49,16 @@ const handleLogin = async (req, res) => {
   if (!accountCheck.success) {
     res.status(400).json({
       success: false,
-      message: "Password is not Correct!",
+      message: "Mật khẩu không đúng!",
     });
     return;
   }
 
   res.status(200).json({
     success: true,
-    message: "Login successfully",
+    message: "Đăng nhập thành công!",
     token: accountCheck.token,
-    account_id: accountCheck.data,
+    account: accountCheck.data,
   });
 };
 
@@ -81,9 +82,25 @@ const changePassword = async (req, res) => {
     return err.message;
   }
 };
+const getAccounts = async (req, res) => {
+  try {
+    const accountsData = await getAllAccounts();
+    res.status(200).json({
+      success: true,
+      message: "Lấy danh sách tài khoản thành công!",
+      data: accountsData,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "Lỗi lấy danh sách tài khoản",
+    });
+  }
+};
 
 module.exports = {
   handleRegister,
   handleLogin,
   changePassword,
+  getAccounts,
 };

@@ -44,7 +44,7 @@ const accountLogin = async (email, password) => {
 
     return {
       success: true,
-      data: account._id,
+      data: account,
       token: { accessToken, refreshToken },
     };
   } catch (err) {
@@ -60,6 +60,9 @@ const updatePassword = async (account_id, password, current) => {
     }
 
     const checkPassword = await bcrypt.compare(current, account.password);
+    console.log("Current password input:", current);
+    console.log("Stored password:", account.password);
+    console.log("Password match:", checkPassword);
     if (!checkPassword) {
       return { message: "Password is incorrect", success: false };
     }
@@ -80,10 +83,20 @@ const updatePassword = async (account_id, password, current) => {
   }
 };
 
+const getAllAccounts = async () => {
+  try {
+    const accountsList = await accounts.find({}); // Ẩn mật khẩu
+    return accountsList;
+  } catch (err) {
+    return err.message;
+  }
+};
+
 module.exports = {
   checkEmailExist,
   hashPassword,
   createNewAccount,
   accountLogin,
   updatePassword,
+  getAllAccounts,
 };
