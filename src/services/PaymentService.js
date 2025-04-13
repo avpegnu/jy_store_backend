@@ -1,6 +1,6 @@
 const moment = require("moment");
 
-const createPaymentGateway = (req, res) => {
+const createPaymentGateway = (req, total, order_id) => {
   process.env.TZ = "Asia/Ho_Chi_Minh";
   let date = new Date();
   let createDate = moment(date).format("YYYYMMDDHHmmss");
@@ -14,10 +14,10 @@ const createPaymentGateway = (req, res) => {
   let tmnCode = "CXSOE8I4";
   let secretKey = "YATOAUMR9KM6ZGUXS7SH5EVZRMS3DLY8";
   let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-  let returnUrl = "http://localhost:5174";
-  let orderId = moment(date).format("DDHHmmss");
-  // let amount = req.body.amount;
-  let amount = 10000;
+  let returnUrl = "http://localhost:5173/success?vnp_success=1";
+  let orderId = order_id;
+  let amount = total;
+  // let amount = 10000;
   // let bankCode = req.body.bankCode;
   let bankCode = "NCB";
 
@@ -54,10 +54,10 @@ const createPaymentGateway = (req, res) => {
   vnp_Params["vnp_SecureHash"] = signed;
   vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
 
-  res.status(200).json({
+  return {
     message: "Payment gateway created successfully",
     data: vnpUrl,
-  });
+  };
 };
 
 function sortObject(obj) {
