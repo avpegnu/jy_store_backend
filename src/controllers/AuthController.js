@@ -5,7 +5,7 @@ const {
   accountLogin,
   updatePassword,
   getAllAccounts,
-  index,
+  updateAccountById,
 } = require("../services/AuthService");
 
 const handleRegister = async (req, res) => {
@@ -98,9 +98,23 @@ const getAccounts = async (req, res) => {
   }
 };
 
+const updateAccount = async (req, res) => {
+  try {
+    console.log(1);
+    const { id } = req.params;
+    const updated = await updateAccountById(id, req.body);
+    res.status(200).json(updated);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Cập nhật tài khoản thất bại", error: err });
+  }
+};
+
 module.exports = {
   handleRegister,
   handleLogin,
   changePassword,
   getAccounts,
+  updateAccount,
 };

@@ -73,16 +73,13 @@ const updatePaymentStatus = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { id } = req.params;
-    console.log("id", id);
-    const { status } = req.body;
+   
 
+    const { status } = req.body;
+    
     const updatedOrder = await OrderService.updateOrder(id, {
       order_status: status,
     });
-
-    if (!updatedOrder) {
-      return res.status(404).json({ error: "Order not found" });
-    }
 
     res.json(updatedOrder);
   } catch (err) {

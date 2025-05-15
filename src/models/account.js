@@ -7,6 +7,11 @@ const AccountSchema = new Schema(
     name: { type: String, required: true, default: "Guest" },
     email: { type: String, required: true },
     password: { type: String, minLength: 6, required: true },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+    },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },

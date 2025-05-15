@@ -92,6 +92,10 @@ const getAllAccounts = async () => {
   }
 };
 
+const updateAccountById = async (id, updateData) => {
+  return await accounts.findByIdAndUpdate(id, updateData, { new: true });
+};
+
 module.exports = {
   checkEmailExist,
   hashPassword,
@@ -99,4 +103,5 @@ module.exports = {
   accountLogin,
   updatePassword,
   getAllAccounts,
+  updateAccountById,
 };
